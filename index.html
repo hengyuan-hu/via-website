@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VIA</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="sheet">
+
+  <!-- 1. Title & authors -->
+  <header class="hero">
+    <h1 class="title" id="site-title">VIA: <span class="acr">V</span>isual <span class="acr">I</span>nterface <span class="acr">A</span>gent for Robot Control</h1>
+    <p class="subtitle" id="site-subtitle">Your coding/computer-use agent is secretly a robot control agent.</p>
+
+    <ol class="authors">
+      <li><a href="https://hengyuanhu.com/" target="_blank" rel="noopener">Hengyuan Hu</a></li>
+      <li><a href="https://priyasundaresan.github.io/" target="_blank" rel="noopener">Priya Sundaresan</a></li>
+      <li><a href="https://scholar.google.com/citations?user=SnTMyGUAAAAJ&amp;hl=en" target="_blank" rel="noopener">Jensen Gao</a></li>
+      <li><a href="https://dorsa.fyi/" target="_blank" rel="noopener">Dorsa Sadigh</a></li>
+    </ol>
+    <ol class="affiliations">
+      <li>Stanford University</li>
+    </ol>
+
+    <nav class="links">
+      <a href="#">Paper</a>
+      <a href="#">Code</a>
+    </nav>
+  </header>
+
+  <!-- 2. Highlights (in place of an abstract) -->
+  <section class="section highlights compact">
+    <h2>Abstract</h2>
+    <h3>Core Idea</h3>
+    <ul>
+      <li>Recast robot control as a visual tool-use task for agents, similar to
+        general computer use.</li>
+      <li>Design a visual interface and a small set of versatile MCP tools for
+        agents to see and command the robot.</li>
+      <li>Run off-the-shelf agents (Claude Code or Codex) to drive the interface
+        and complete robot manipulation tasks.</li>
+    </ul>
+    <h3>Result Highlights</h3>
+    <ul>
+      <li>VIA solves a diverse suite of tabletop manipulation tasks
+        <strong>zero-shot</strong> with a high success rate.</li>
+      <li>VIA inherits strong reasoning, long-horizon planning, and closed-loop
+        control capabilities from frontier agents for free.</li>
+      <li>VIA rides the wave of foundation model scaling, with VIA (Fable)
+        significantly outperforming VIA (Opus).</li>
+    </ul>
+    <h3>Note</h3>
+    <ul>
+      <li>VIA is <strong>not</strong> Code-as-Policies (CaP). It involves no CaP-style code
+        generation and provides no perception or skill primitives for the model to
+        compose. VIA observes the UI through raw pixels (screenshots) and acts via
+        low-level tools akin to mouse and keyboard operations in computer-use.</li>
+      <li>VIA opens up a new opportunity for leveraging state-of-the-art foundation
+        models at scale in robotics, and demonstrates that with the right
+        interface, robot control can become another economically valuable agentic
+        task that benefits directly from modern models and agents.</li>
+    </ul>
+  </section>
+
+  <!-- 2.25 VIA (method) -->
+  <section class="section method">
+    <h2>VIA</h2>
+    <figure class="method-figure">
+      <img src="assets/front_figure.svg" alt="VIA system overview: an agent (Claude Code) operates a browser-based 3D robot-control UI through MCP tools; the UI commands the robot environment and reconstructs the scene from RGB-D cameras.">
+      <figcaption>
+        The agent observes the interface by taking a screenshot of the whole UI, and
+        acts through MCP tools rendered as clicks, drags, and keystrokes on it. The
+        tools move a blue target gripper, the "digital twin" of the real gripper:
+        the agent steers the target gripper to a desired pose (setting a waypoint),
+        then calls <code>execute_waypoint</code> to invoke a simple PI
+        (Proportional-Integral) controller that moves the real gripper to that pose.
+        This observe-act loop repeats until the agent calls <code>end_episode</code>.
+        The UI reconstructs the 3D scene from RGB-D cameras. The MCP Tools section
+        below covers the documentation and illustrations of all available tools.
+      </figcaption>
+    </figure>
+    <figure class="method-demo">
+      <div class="method-tabs" id="method-tabs"><!-- task tabs injected here --></div>
+      <div class="video-wrap method-video-wrap" id="method-wrap">
+        <video id="method-video" controls muted loop autoplay playsinline preload="metadata"></video>
+      </div>
+      <figcaption>
+        <p>
+          Videos showing episodes of VIA with Claude Code Fable completing
+          different tasks zero-shot. The agent completes a task via a loop of
+          observation, thinking, and finally a tool call that returns a new
+          observation, until it reaches a terminal condition.
+        </p>
+        <p id="method-highlights-label" hidden><strong>Highlights</strong></p>
+        <ul id="method-highlights" hidden><!-- per-video highlights injected here --></ul>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- 2.75 Evaluation -->
+  <!-- Draft the text in website/evaluation.md, then port it here (see abstract.md workflow). -->
+  <section class="section evaluation compact">
+    <h2>Evaluation</h2>
+    <p>
+      We use a suite of six tasks drawn from different benchmarks, together
+      covering diverse manipulations.
+    </p>
+    <figure class="method-figure">
+      <img src="assets/task_figure.svg" alt="The six evaluation tasks: for each task, the top panel shows an example initial state and the bottom panel the final state of a successful VIA rollout.">
+      <figcaption>
+        The six evaluation tasks. Object placements are randomized across seeds.
+        <details class="fold">
+          <summary>Task descriptions</summary>
+          <ul>
+            <li><strong>Stack</strong>: Pick up a red cube and place it on a larger green cube, from <a href="https://robosuite.ai/" target="_blank" rel="noopener">robosuite</a>.</li>
+            <li><strong>Turn on stove</strong>: Turn on a stove by rotating its knob, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>.</li>
+            <li><strong>Open drawer</strong>: Open the middle drawer of a three-drawer cabinet, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>.</li>
+            <li><strong>Put bowl on plate</strong>: Pick up a bowl and place it on a plate, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>. This demands physical reasoning and precision, as the bowl must be grasped by pinching its side wall and placed at the exact center of the plate to succeed.</li>
+            <li><strong>Rainbow</strong>: Arrange seven randomly placed colored blocks into a rainbow, a task we created. This tests long-horizon planning and execution.</li>
+            <li><strong>T-block</strong>: Build a T-shape with three blocks of the same size: one blue block on the bottom and two green blocks resting directly on top of it, side by side; from <a href="https://arxiv.org/pdf/2510.06288" target="_blank" rel="noopener">BuilderBench</a>, re-implemented. This requires both solving a physics puzzle and precise manipulation.</li>
+          </ul>
+        </details>
+      </figcaption>
+    </figure>
+    <p>We evaluate VIA using two families of agents:</p>
+    <ul>
+      <li>Claude Code with Opus 4.8 (CC-Opus) and Fable 5 (CC-Fable),</li>
+      <li>Codex with GPT-5.5 (Codex-5.5) and GPT-5.6-Sol (Codex-5.6-Sol).</li>
+    </ul>
+    <p>
+      The reasoning effort is set to <code>xhigh</code> for all agents.
+    </p>
+    <p>
+      On top of a shared system prompt on how to use the interface, we consider two
+      variants of task-specific prompts for each task:
+    </p>
+    <ul>
+      <li><strong>minimal</strong>: states only the task's goal and success
+        condition, testing the <em>zero-shot</em> performance of each agent.</li>
+      <li><strong>detailed</strong>: provides an example list of waypoints,
+        simulating the effect of having a demonstration.</li>
+    </ul>
+    <p>
+      We disable memory read/write for the agents so that they cannot gain
+      cross-episode experience.
+    </p>
+    <table class="results-table">
+      <caption>Success rate</caption>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>CC-Opus<small>minimal</small></th>
+          <th>CC-Fable<small>minimal</small></th>
+          <th>Codex-5.5<small>minimal</small></th>
+          <th>Codex-5.6-Sol<small>minimal</small></th>
+          <th class="spacer"></th>
+          <th>CC-Opus<small>detailed</small></th>
+          <th>Codex-5.5<small>detailed</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Stack</td><td><strong>100%</strong></td><td><strong>100%</strong></td><td><strong>100%</strong></td><td><strong>100%</strong></td><td class="spacer"></td><td>—</td><td>—</td></tr>
+        <tr><td>Turn on stove</td><td><strong>100%</strong></td><td><strong>100%</strong></td><td>90%</td><td>90%</td><td class="spacer"></td><td><strong>100%</strong></td><td>90%</td></tr>
+        <tr><td>Open drawer</td><td>70%</td><td><strong>90%</strong></td><td>30%</td><td>30%</td><td class="spacer"></td><td><strong>100%</strong></td><td>30%</td></tr>
+        <tr><td>Put bowl on plate</td><td>60%</td><td><strong>100%</strong></td><td>40%</td><td>80%</td><td class="spacer"></td><td><strong>100%</strong></td><td>30%</td></tr>
+        <tr><td>Rainbow</td><td>80%</td><td><strong>100%</strong></td><td>60%</td><td>50%</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+        <tr><td>T-block</td><td>10%</td><td><strong>40%</strong></td><td><strong>40%</strong></td><td>20%</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+        <tr class="overall"><td>Overall</td><td>70%</td><td><strong>88%</strong></td><td>60%</td><td>62%</td><td class="spacer"></td><td><strong>100%</strong></td><td>50%</td></tr>
+      </tbody>
+    </table>
+    <p class="table-note">
+      "—" marks combinations we do not evaluate; bold marks the best result per
+      task within each prompt variant; the Overall row averages each column over
+      its evaluated tasks.
+    </p>
+    <details class="fold">
+      <summary>Tool Call Efficiency and Cost</summary>
+      <table class="results-table">
+        <caption>Mean tool calls per successful episode</caption>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>CC-Opus<small>minimal</small></th>
+            <th>CC-Fable<small>minimal</small></th>
+            <th>Codex-5.5<small>minimal</small></th>
+            <th>Codex-5.6-Sol<small>minimal</small></th>
+            <th class="spacer"></th>
+            <th>CC-Opus<small>detailed</small></th>
+            <th>Codex-5.5<small>detailed</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Stack</td><td>28</td><td>40</td><td><strong>26</strong></td><td>32</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+          <tr><td>Turn on stove</td><td>36</td><td>39</td><td>33</td><td><strong>31</strong></td><td class="spacer"></td><td>43</td><td><strong>32</strong></td></tr>
+          <tr><td>Open drawer</td><td>47</td><td>38</td><td><strong>21</strong></td><td>33</td><td class="spacer"></td><td>46</td><td><strong>30</strong></td></tr>
+          <tr><td>Put bowl on plate</td><td>59</td><td><strong>53</strong></td><td>78</td><td>66</td><td class="spacer"></td><td><strong>48</strong></td><td>57</td></tr>
+          <tr><td>Rainbow</td><td>159</td><td><strong>143</strong></td><td>176</td><td>217</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+          <tr><td>T-block</td><td>81</td><td>89</td><td><strong>52</strong></td><td>122</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+          <tr class="overall"><td>Overall</td><td>68</td><td>67</td><td><strong>64</strong></td><td>84</td><td class="spacer"></td><td>46</td><td><strong>40</strong></td></tr>
+        </tbody>
+      </table>
+      <table class="results-table">
+        <caption>Estimated API cost per successful episode (USD)</caption>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>CC-Opus<small>minimal</small></th>
+            <th>CC-Fable<small>minimal</small></th>
+            <th>Codex-5.5<small>minimal</small></th>
+            <th>Codex-5.6-Sol<small>minimal</small></th>
+            <th class="spacer"></th>
+            <th>CC-Opus<small>detailed</small></th>
+            <th>Codex-5.5<small>detailed</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Stack</td><td>$2.4</td><td>$7.3</td><td><strong>$1.5</strong></td><td>$1.6</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+          <tr><td>Turn on stove</td><td>$4.1</td><td>$8.9</td><td>$2.5</td><td><strong>$2.2</strong></td><td class="spacer"></td><td>$5.7</td><td><strong>$3.3</strong></td></tr>
+          <tr><td>Open drawer</td><td>$7.4</td><td>$7.5</td><td>$1.4</td><td><strong>$1.1</strong></td><td class="spacer"></td><td>$6.5</td><td><strong>$1.7</strong></td></tr>
+          <tr><td>Put bowl on plate</td><td>$7.5</td><td>$11.8</td><td>$8.1</td><td><strong>$2.9</strong></td><td class="spacer"></td><td>$5.0</td><td><strong>$4.9</strong></td></tr>
+          <tr><td>Rainbow</td><td>$26.0</td><td>$36.1</td><td>$23.4</td><td><strong>$6.1</strong></td><td class="spacer"></td><td>—</td><td>—</td></tr>
+          <tr><td>T-block</td><td>$9.7</td><td>$19.2</td><td><strong>$6.1</strong></td><td>$10.5</td><td class="spacer"></td><td>—</td><td>—</td></tr>
+          <tr class="overall"><td>Overall</td><td>$9.5</td><td>$15.1</td><td>$7.2</td><td><strong>$4.1</strong></td><td class="spacer"></td><td>$5.7</td><td><strong>$3.3</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="table-note">
+        CC costs are read directly from each episode's session cost, while Codex
+        costs are estimated from token usage and listed API pricing.
+      </p>
+    </details>
+  </section>
+
+  <!-- 3 & 4. Rollout showcase -->
+  <section class="section showcase">
+    <h2>Task Rollouts</h2>
+
+    <div class="task-tabs" id="task-tabs"><!-- task tabs injected here --></div>
+
+    <div class="viewer" id="viewer" hidden>
+      <div class="viewer-head">
+        <h3 id="viewer-title">Task</h3>
+      </div>
+
+      <div class="variant-tabs" id="variant-tabs"><!-- variant buttons injected here --></div>
+
+      <div class="seed-tabs" id="seed-tabs"><!-- seed chips injected here --></div>
+
+      <div class="players" id="players">
+        <figure class="player">
+          <figcaption>Web UI</figcaption>
+          <div class="video-wrap" id="web-wrap">
+            <video id="web-video" controls muted loop playsinline preload="metadata"></video>
+          </div>
+        </figure>
+        <figure class="player">
+          <figcaption>Cameras</figcaption>
+          <div class="video-wrap" id="cam-wrap">
+            <video id="cam-video" controls muted loop playsinline preload="metadata"></video>
+          </div>
+        </figure>
+      </div>
+
+      <div class="seed-stats" id="seed-stats"></div>
+      <div class="seed-transcript" id="seed-transcript"></div>
+    </div>
+  </section>
+
+  <!-- 5. MCP Tools -->
+  <section class="section tools" id="tools-section" hidden>
+    <div class="tools-layout">
+      <div class="tools-side">
+        <h2>MCP Tools</h2>
+        <nav class="tool-list" id="tool-list"><!-- tool names injected here --></nav>
+      </div>
+      <div class="tool-detail">
+        <code class="tool-sig" id="tool-sig"></code>
+        <div class="tool-doc" id="tool-doc"></div>
+        <div class="tool-media" id="tool-media"></div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /.sheet -->
+
+  <script src="app.js"></script>
+</body>
+</html>
