@@ -21,7 +21,7 @@ async function init() {
 // ---------- Method demo ----------
 
 const METHOD_DEMOS = [
-  { id: "dual_stack", name: "T-block", video: "data/run_eval/0706_dual_stack/fable/videos/seed1.mp4",
+  { id: "t_block", name: "T-block", video: "data/run_eval/0706_dual_stack/fable/videos/seed1.mp4",
     highlights: [
       "0:00 — the agent figures out that the bottom blue block must be rotated 45 degrees so that there is enough contact area for the two green blocks to rest on top side by side.",
       "0:54 — a descent stalls when one finger clips the edge of the green block; the agent notices, lifts, re-centers, and re-grasps cleanly.",
@@ -44,11 +44,53 @@ const METHOD_DEMOS = [
       "1:11 — after many attempts, the agent realizes that it can rotate the gripper to avoid the collision.",
       "1:20 — final adjustment after rotating the gripper, to make sure that the bowl lands on the center of the plate.",
     ] },
+  { id: "square", name: "Square", video: "data/run_eval/0914_min_fable5/square/videos/seed10.mp4",
+    highlights: [
+      "0:00 — the agent hovers over the nut and the peg from several viewpoints, zooming in and orbiting to a top-down view, to measure where they are and how the nut is oriented.",
+      "0:08 — it brings up the rotation gizmo, rotates the target gripper in two steps to match the nut's handle, and teleports it onto the handle with a click.",
+      "0:32 — after lifting the nut, it resets the camera, hovers on the peg top to localize it, and teleports the target gripper directly above the peg.",
+      "0:39 — a series of millimetre-scale translations aligns the hole of the nut with the peg; the final descent at 0:55 seats it.",
+    ] },
   { id: "rainbow", name: "Rainbow", video: "data/run_eval/0707_rainbow/fable/videos/seed1.mp4",
     highlights: [
       "0:00 — the agent observes and reasons about the scene, then decides to construct the rainbow arc from left to right so that red, green, and blue are already close to where they should be, reducing the number of block movements. It also decides the location of the rainbow so that the green block requires no movement at all.",
       "2:48 — the indigo block slips out of the gripper during transport; the agent notices, locates where it fell, and re-grasps it deeper this time.",
       "3:29 — although the blue block is already close to its slot, the agent still decides to move it so the final outcome looks better.",
+    ] },
+  { id: "lamp", name: "Lamp", real: true, video: "data/real/lamp/videos/episode1.mp4",
+    highlights: [
+      "0:00 — the lamp is out of view, so the agent rotates the base to search for it, spots it on the black cabinet, and drives toward it in two steps.",
+      "0:42 — it hovers on the pull chain in the head view, coarsely teleports the end effector to the lamp head with a click, and adjust the target further to face the chain instead of the lamp head.",
+      "1:04 — switching to the wrist camera, it hovers on the chain's handle and refines the alignment with small translations before advancing onto it.",
+      "1:26 — it closes the gripper and pulls the chain down 4 cm; the lamp turns on, and it releases the chain and backs away.",
+    ] },
+  { id: "shelf", name: "Shelf", real: true, video: "data/real/shelf/videos/episode2.mp4",
+    highlights: [
+      "0:00 — the top drawer's handle is already in the wrist view; the agent hovers on it, nudges the gripper into place in two steps, closes on the handle at 0:14, and pulls the drawer out 30 cm.",
+      "0:33 — it first lifts the gripper up and back, clear of the open drawer, then drives the base sideways along the bookshelf in two moves until the orange toy lion comes into view.",
+      "1:03 — it hovers on the lion in both cameras, drives 40 cm closer, and teleports the gripper onto it with a click at 1:16; after a wrist-view check and a short advance it grasps the lion at 1:36.",
+      "1:49 — with the cabinet out of view, it retraces its path in four base moves; it also moves backward along the way to avoid collision between the gripper and the side of the shelf.",
+    ] },
+  { id: "towel", name: "Towel", real: true, video: "data/real/towel/videos/episode4.mp4",
+    highlights: [
+      "0:00 — the agent hovers on the near and far corners of the towel in the head view, tilts the gripper to point down, and teleports it above the near corner with a click.",
+      "0:15 — switching to the wrist camera, it hovers on the corner, descends onto it in two small steps, pinches it, and lifts it clear of the table.",
+      "0:33 — it hovers on the opposite corner in the head view to measure the distance, carries the held corner across in two translations, and lowers it with a last wrist-guided adjustment at 0:51 so the corners meet.",
+      "0:57 — it releases the corner, lifts the gripper away, and backs off so the diagonal fold is visible in both cameras.",
+    ] },
+  { id: "wipe", name: "Wipe", real: true, video: "data/real/wipe/videos/episode5.mp4",
+    highlights: [
+      "0:00 — the agent spots the open wipes can in the head view, hovers on the protruding wipe, and teleports the gripper to it with a click; two wrist-view hovers (0:11, 0:18) fine-tune the approach before it closes on the wipe and pulls it free.",
+      "0:37 — holding the wipe, it tilts the gripper downward in two rotations and teleports it above the black mark with a click on the head view.",
+      "0:53 — it hovers in the wrist view to gauge the height, presses the wipe onto the table, scrubs with sideways strokes (0:59, 1:06), then lifts at 1:14 to inspect the residue.",
+      "1:21 — seeing a few remaining patches, it hovers on each one in the wrist view and returns for targeted passes, lifting to check in between, until the table is clean at 1:56.",
+    ] },
+  { id: "basket", name: "Basket", real: true, video: "data/real/basket/videos/episode3.mp4",
+    highlights: [
+      "0:00 — the agent hovers on the lid's raised front edge in the head view, composes a tilted and rolled gripper pose in several rotation steps (resetting once to start over) so the fingers can straddle the edge, and teleports it there with a click.",
+      "0:18 — in the wrist view it hovers on the edge and advances the gripper onto the lid in two steps, then closes on it at 0:31.",
+      "0:35 — it lifts the lid along the hinge's arc in three rotate-and-translate waypoints, re-tilting the gripper each time so it keeps following the curve as the lid rises.",
+      "0:58 — once the lid is nearly upright it pushes it past the balance point in two more moves, releases at 1:12, and retracts the gripper.",
     ] },
 ];
 
@@ -56,13 +98,25 @@ function initMethod() {
   const tabs = document.getElementById("method-tabs");
   if (!tabs) return;
   tabs.innerHTML = "";
-  METHOD_DEMOS.forEach((demo) => {
-    const tab = document.createElement("button");
-    tab.className = "method-tab";
-    tab.dataset.id = demo.id;
-    tab.textContent = demo.name;
-    tab.addEventListener("click", () => selectMethodDemo(demo));
-    tabs.appendChild(tab);
+  // One row of simulation tasks, one of real-robot tasks.
+  [["Simulation", false], ["Real world", true]].forEach(([title, real]) => {
+    const demos = METHOD_DEMOS.filter((d) => Boolean(d.real) === real);
+    if (!demos.length) return;
+    const row = document.createElement("div");
+    row.className = "method-row";
+    const label = document.createElement("span");
+    label.className = "method-row-label";
+    label.textContent = title;
+    row.appendChild(label);
+    demos.forEach((demo) => {
+      const tab = document.createElement("button");
+      tab.className = "method-tab";
+      tab.dataset.id = demo.id;
+      tab.textContent = demo.name;
+      tab.addEventListener("click", () => selectMethodDemo(demo));
+      row.appendChild(tab);
+    });
+    tabs.appendChild(row);
   });
   if (METHOD_DEMOS.length) selectMethodDemo(METHOD_DEMOS[0]);
 }
@@ -85,6 +139,10 @@ function selectMethodDemo(demo) {
     t.classList.toggle("active", t.dataset.id === demo.id)
   );
   loadVideo("method-wrap", "method-video", demo.video);
+  const video = document.getElementById("method-video"); // clips differ in shape (sim 26:9, real 4:1)
+  video.onloadedmetadata = () => {
+    document.getElementById("method-wrap").style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+  };
   const list = document.getElementById("method-highlights");
   if (list) {
     list.innerHTML = "";
@@ -194,7 +252,15 @@ function setText(id, value) {
 function renderTaskTabs(tasks) {
   const tabs = document.getElementById("task-tabs");
   tabs.innerHTML = "";
+  let group = null;
   tasks.forEach((task) => {
+    if (task.group && task.group !== group) { // label each run of tasks (Simulation, Real world)
+      group = task.group;
+      const label = document.createElement("span");
+      label.className = "task-group";
+      label.textContent = group;
+      tabs.appendChild(label);
+    }
     const tab = document.createElement("button");
     tab.className = "task-tab";
     tab.dataset.id = task.id;
@@ -211,7 +277,9 @@ function selectTask(task) {
   );
 
   setText("viewer-title", task.name);
-  document.getElementById("viewer").hidden = false;
+  const viewer = document.getElementById("viewer");
+  viewer.hidden = false;
+  viewer.classList.toggle("real", task.group === "Real world"); // 3:2 players for the real-robot feeds
 
   renderVariantTabs(task);
   if (task.variants.length) selectVariant(task, task.variants[0]);
@@ -220,19 +288,30 @@ function selectTask(task) {
 function renderVariantTabs(task) {
   const tabs = document.getElementById("variant-tabs");
   tabs.innerHTML = "";
+  // Rows: CC, Codex, then detailed-prompt variants.
+  const rows = [[], [], []];
   task.variants.forEach((variant) => {
-    const tab = document.createElement("button");
-    tab.className = "variant-tab";
-    tab.dataset.id = variant.id;
-    const label = document.createElement("span");
-    label.className = "variant-label";
-    label.textContent = variant.label;
-    const rate = document.createElement("span");
-    rate.className = "variant-rate";
-    rate.textContent = `${variant.n_success}/${variant.n_total}`;
-    tab.append(label, rate);
-    tab.addEventListener("click", () => selectVariant(task, variant));
-    tabs.appendChild(tab);
+    const row = variant.label.includes("detailed") ? 2 : variant.label.startsWith("Codex") ? 1 : 0;
+    rows[row].push(variant);
+  });
+  rows.filter((row) => row.length).forEach((row) => {
+    const rowEl = document.createElement("div");
+    rowEl.className = "variant-row";
+    row.forEach((variant) => {
+      const tab = document.createElement("button");
+      tab.className = "variant-tab";
+      tab.dataset.id = variant.id;
+      const label = document.createElement("span");
+      label.className = "variant-label";
+      label.textContent = variant.label;
+      const rate = document.createElement("span");
+      rate.className = "variant-rate";
+      rate.textContent = `${variant.n_success}/${variant.n_total}`;
+      tab.append(label, rate);
+      tab.addEventListener("click", () => selectVariant(task, variant));
+      rowEl.appendChild(tab);
+    });
+    tabs.appendChild(rowEl);
   });
 }
 
@@ -254,7 +333,7 @@ function renderSeedTabs(variant) {
     const chip = document.createElement("button");
     chip.className = "seed-chip " + (seed.success ? "ok" : "fail");
     chip.dataset.seed = seed.seed;
-    chip.textContent = `seed ${seed.seed}`;
+    chip.textContent = `${activeTask.unit || "seed"} ${seed.seed}`;
     chip.addEventListener("click", () => selectSeed(variant, seed));
     tabs.appendChild(chip);
   });

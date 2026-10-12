@@ -1,0 +1,43 @@
+[say]  I’ll find the cabinet lamp, pull its chain, then release and move away once it’s lit.
+
+[tool] sphinx-robot/observe  {}  -> completed
+[tool] sphinx-robot/nav_rotate  {"angle_deg": -55}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_rotate  {"angle_deg": 22}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": 0.45}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.598, "v": 0.244}  -> completed
+[tool] sphinx-robot/ee_teleport_via_click  {"u": 0.582, "v": 0.267}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.579, "v": 0.347}  -> completed
+[say]  The lamp is on the black cabinet ahead. I’m raising the open gripper to the chain for the final approach.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.4, "dy_m": -0.055, "dz_m": 0.5}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": 4}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.65, "v": 0.721}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.619, "v": 0.76}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.3, "dy_m": -0.13, "dz_m": 0.035}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dy_m": 0.09, "dz_m": -0.15}  -> completed
+[say]  The chain is visible beside the stem. I’m aligning the gripper with its narrow neck and checking clearance before closing.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.29, "dy_m": -0.065, "dz_m": -0.1}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.475, "v": 0.583}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.066, "dy_m": 0.002, "dz_m": 0.016}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dy_m": 0.009, "dx_m": 0.008}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "closed"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": -0.04}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The lamp is on, with warm light on the shade and wall. I’m releasing the chain and backing away.
+
+[tool] sphinx-robot/gripper_set  {"state": "open"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.2}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": -0.45}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/end_episode  {}  -> completed
+[say]  The lamp is on, the chain is released, and the robot has moved away. Episode saved.

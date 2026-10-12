@@ -1,0 +1,82 @@
+[say]  I’ll open the top drawer, find the toy lion on the bookshelf, and place it inside.
+
+[tool] sphinx-robot/observe  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.195, "v": 0.394}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": 0.4, "dy_m": 0.28}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": 0.3, "dy_m": 0.39}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  I’ve located the cabinet and am aligning the gripper with the top drawer’s handle.
+
+[tool] sphinx-robot/ee_teleport_via_click  {"u": 0.418, "v": 0.604}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.408, "v": 0.733}  -> completed
+[tool] sphinx-robot/show_approach_axis  {}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_translate  {"dx_m": 0.09, "dy_m": 0.007, "dz_m": -0.021}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.44, "v": 0.74}  -> completed
+[say]  The handle is centered between the jaws. I’m moving in slightly for a secure grip, then pulling the drawer open.
+
+[tool] sphinx-robot/ee_wrist_centric_translate  {"dx_m": 0.023, "dy_m": 0.004}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "closed"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.24, "dy_m": 0.028}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.08, "dy_m": 0.008}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "open"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The top drawer is open. I’m moving clear of it and over to the bookshelf to pick up the lion.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.12, "dz_m": 0.32}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dy_m": -0.5}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dy_m": -0.45}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  I found the orange toy lion on the stack of books. I’m positioning the gripper above it for a careful pickup.
+
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -45}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -15}  -> completed
+[tool] sphinx-robot/ee_teleport_via_click  {"u": 0.633, "v": 0.444}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/show_approach_axis  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.44, "v": 0.655}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_translate  {"dx_m": 0.08}  -> completed
+[say]  The gripper is aligned over the lion’s body. I’m lowering it around the toy, then checking the grip with a lift.
+
+[tool] sphinx-robot/ee_wrist_centric_translate  {"dz_m": -0.015}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "closed"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": 0.16}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The lion lifted successfully and is secure in the gripper. I’m carrying it back to the open drawer.
+
+[tool] sphinx-robot/nav_translate  {"dx_m": -0.35}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dy_m": 0.5}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dy_m": 0.5}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  I’m back at the cabinet with the lion still held. I’m adjusting the position so I can lower it into the open drawer.
+
+[tool] sphinx-robot/nav_translate  {"dx_m": -0.25, "dy_m": 0.1}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.659, "v": 0.647}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.338, "v": 0.639}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.12, "dy_m": -0.035, "dz_m": -0.29}  -> completed
+[say]  The lion is above the drawer’s open front section. I’m lowering it into the drawer before releasing it.
+
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": -0.1}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "open"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": 0.2}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The lion is resting inside the open top drawer, and the gripper is clear. I’m saving the episode.
+
+[tool] sphinx-robot/end_episode  {}  -> completed
+[say]  Opened the top drawer and placed the toy lion inside. The episode is saved.

@@ -1,0 +1,51 @@
+[say]  I’ll locate the tall brown basket, open its lid fully, and check that it stays open.
+
+[tool] sphinx-robot/observe  {}  -> completed
+[tool] sphinx-robot/nav_rotate  {"angle_deg": 45}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.552, "v": 0.432}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.531, "v": 0.485}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": 0.4}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The basket’s lid is slightly raised at the front. I’m positioning the gripper on that edge so I can lift it around the rear hinge.
+
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.57, "v": 0.562}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.55, "v": 0.59}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"roll_deg": 45}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"roll_deg": 15}  -> completed
+[tool] sphinx-robot/ee_teleport_via_click  {"u": 0.57, "v": 0.556}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.585, "v": 0.755}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.08, "dy_m": -0.022, "dz_m": 0.012}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "closed"}  -> completed
+[say]  The lid edge is between the gripper pads. I’m closing the grip, then lifting in small steps to follow the hinge.
+
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -10, "tilt_left_deg": 17}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.049, "dy_m": 0.005, "dz_m": 0.195}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -12, "tilt_left_deg": 21}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.14, "dy_m": 0.02, "dz_m": 0.185}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The lid is lifting with the gripper and the basket is staying in place. I’m guiding it farther back until it can rest fully open.
+
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -9, "tilt_left_deg": 16}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.176, "dy_m": 0.01, "dz_m": 0.1}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.13, "dy_m": 0.015, "dz_m": 0.005}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.1, "dy_m": 0.01, "dz_m": -0.025}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The lid has reached the back of its opening arc. I’m releasing it and checking where it settles.
+
+[tool] sphinx-robot/gripper_set  {"state": "open"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_translate  {"dx_m": -0.13}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": -0.4}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The lid has folded back and remains fully open after release. The robot is clear of the basket.
+
+[tool] sphinx-robot/end_episode  {}  -> completed
+[say]  The tall brown basket’s lid is fully open. Episode saved.

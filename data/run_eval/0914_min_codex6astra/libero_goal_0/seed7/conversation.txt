@@ -1,0 +1,23 @@
+[say]  I’ll locate the middle drawer’s handle, grip it, and pull it outward, checking the movement after each step.
+[tool] sphinx2/screenshot  {}  -> completed
+[tool] sphinx2/gripper_get_pose  {}  -> completed
+[tool] sphinx2/camera_orbit_via_key  {"d_azimuth": 45, "d_elevation": -15}  -> completed
+[tool] sphinx2/hover  {"u": 0.492, "v": 0.585}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "x", "angle": -90}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.492, "v": 0.585}  -> completed
+[say]  I’ve aligned the gripper with the middle handle so the fingers can close above and below it. I’ll move in and secure the grip before pulling.
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 14}  -> failed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 10}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 6}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The gripper has closed around the handle. I’ll pull straight outward and check that the middle drawer moves with it.
+[tool] sphinx2/gripper_translate  {"d_y": 0.1}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_translate  {"d_y": 0.1}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  Opened the middle drawer successfully. The simulator confirmed success and ended the episode automatically.

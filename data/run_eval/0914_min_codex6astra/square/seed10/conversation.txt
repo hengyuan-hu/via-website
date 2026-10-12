@@ -1,0 +1,49 @@
+[say]  I’ll inspect the scene, pick up the square nut, and align its hole over the square peg before lowering it to the table.
+
+[tool] sphinx2/screenshot  {}  -> completed
+[tool] sphinx2/gripper_get_pose  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.703, "v": 0.563}  -> completed
+[tool] sphinx2/hover  {"u": 0.738, "v": 0.55}  -> completed
+[tool] sphinx2/camera_zoom  {"steps": 6, "u": 0.733, "v": 0.564}  -> completed
+[say]  The nut has a side tab that leaves its hole clear for placement. I’ll grasp that tab, then use the camera views to check the alignment above the peg.
+
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": 70}  -> completed
+[tool] sphinx2/hover  {"u": 0.696, "v": 0.531}  -> completed
+[tool] sphinx2/hover  {"u": 0.724, "v": 0.576}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": 44}  -> completed
+[tool] sphinx2/hover  {"u": 0.695, "v": 0.558}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.695, "v": 0.558}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_translate  {"d_z": -0.078}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The gripper has closed around the tab. I’ll lift the nut to confirm the grasp, then adjust its rotation to match the square peg.
+
+[tool] sphinx2/gripper_translate  {"d_z": 0.1}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.718, "v": 0.726}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": -17.2}  -> completed
+[tool] sphinx2/gripper_translate  {"d_z": 0.07}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.758, "v": 0.386}  -> completed
+[say]  The nut is securely lifted and its square edges now match the peg’s orientation. I’m measuring the offset from the gripper to the hole so I can center the hole precisely.
+
+[tool] sphinx2/hover  {"u": 0.754, "v": 0.344}  -> completed
+[tool] sphinx2/hover  {"u": 0.755, "v": 0.372}  -> completed
+[tool] sphinx2/hover  {"u": 0.752, "v": 0.35}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.718, "v": 0.726}  -> completed
+[tool] sphinx2/gripper_translate  {"d_y": -0.0617}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_translate  {"d_x": -0.01, "d_z": -0.05}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_translate  {"d_z": -0.045}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The square peg is inside the nut’s hole. I’ll slide the nut down to the table and release the tab.
+
+[tool] sphinx2/gripper_translate  {"d_z": -0.095}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The square nut is on the square peg. The simulator confirmed success and ended the episode automatically.

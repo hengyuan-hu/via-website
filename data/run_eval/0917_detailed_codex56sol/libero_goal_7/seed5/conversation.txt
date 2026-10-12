@@ -1,0 +1,21 @@
+[say]  I’ll operate the arm waypoint-by-waypoint, using the returned camera views to verify the knob grasp and rotation before ending the episode.
+[tool] sphinx2/screenshot  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.753, "v": 0.463}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.753, "v": 0.463}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 10}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The gripper is now centered over the knob’s raised stem and descended to contact depth. I’m closing it in a dedicated waypoint, then I’ll verify the grasp before applying the 90° counter-clockwise turn.
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/camera_orbit_via_key  {"d_azimuth": 0, "d_elevation": 40}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/camera_zoom  {"u": 0.75, "v": 0.25, "steps": 5}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": -10}  -> completed
+[tool] sphinx2/gripper_reset  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": 90}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  Task completed successfully: the stove knob was grasped and rotated counter-clockwise. The simulator confirmed `TASK SUCCEEDED` and closed the episode automatically.

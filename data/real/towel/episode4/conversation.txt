@@ -1,0 +1,40 @@
+[say]  I’ll inspect the towel, then bring one corner over to the opposite corner to make the diagonal fold.
+
+[tool] sphinx-robot/observe  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.678, "v": 0.773}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.653, "v": 0.608}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -45}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -12}  -> completed
+[tool] sphinx-robot/ee_teleport_via_click  {"u": 0.677, "v": 0.771}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  I’ve positioned the gripper above the near corner. I’ll pinch that corner and lift it across to the far corner.
+
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.466, "v": 0.774}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": -0.047}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": -0.013, "dx_m": 0.006}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "closed"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": 0.12, "dx_m": 0.04}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.505, "v": 0.63}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.17, "dy_m": 0.002, "dz_m": 0.072}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The corner is securely held, and the towel is folding along the diagonal. I’m lowering it toward the opposite corner and checking the alignment.
+
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.42, "v": 0.312}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.18, "dy_m": 0.023, "dz_m": -0.12}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.464, "v": 0.576}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.032, "dy_m": -0.001, "dz_m": -0.063}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "open"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The corners are together and the towel has a triangular fold. I’ll lift the gripper clear to check the result.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dz_m": 0.18, "dx_m": -0.08}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.26, "dy_m": -0.16, "dz_m": 0.06}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/end_episode  {}  -> completed
+[say]  Folded the towel diagonally into a triangle on the coffee table. Episode saved.

@@ -1,0 +1,41 @@
+[say]  I’ll use the robot’s visual feedback to locate the back control knob, then make a controlled 90° counter-clockwise turn and verify the stove is on.
+[tool] sphinx2/screenshot  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.141, "v": 0.387}  -> completed
+[tool] sphinx2/gripper_get_pose  {}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.141, "v": 0.387}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The wrist camera now has the black knob centered beneath the open fingers. I’ll lower in a separate waypoint to seat the grasp before closing.
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 7}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.165, "v": 0.394}  -> completed
+[tool] sphinx2/hover  {"u": 0.186, "v": 0.778}  -> completed
+[tool] sphinx2/gripper_translate  {"d_x": 0.024, "d_y": 0.057}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": -90}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The first twist did not trigger completion, so the contact is not yet secure. I’ll reset the grasp depth around the knob and perform the turn again only after the fingers are seated.
+[tool] sphinx2/gripper_toggle  {"state": "open"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 5}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": 90}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.165, "v": 0.394}  -> completed
+[tool] sphinx2/hover  {"u": 0.747, "v": 0.467}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "open"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_translate  {"d_x": 0.03, "d_y": 0.08, "d_z": 0.045}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 6}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[say]  The gripper is now centered and closed around the knob at its working height. I’m applying the verified counter-clockwise quarter-turn.
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": 90}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  Stove turned on successfully. The task reports success and the episode has closed automatically.

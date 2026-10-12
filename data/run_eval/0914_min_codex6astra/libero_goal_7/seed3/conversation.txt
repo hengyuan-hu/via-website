@@ -1,0 +1,23 @@
+[say]  I’ll locate the stove’s control knob, grip it, and turn it 90° counter-clockwise as viewed from above. I’ll check the result before ending the episode.
+
+[tool] sphinx2/screenshot  {}  -> completed
+[tool] sphinx2/gripper_get_pose  {}  -> completed
+[tool] sphinx2/hover  {"u": 0.741, "v": 0.482}  -> completed
+[tool] sphinx2/hover  {"u": 0.74, "v": 0.465}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.74, "v": 0.465}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The knob is directly beneath the gripper, and the fingers are aligned to grip its raised handle. I’ll lower the gripper for a firm grasp, then turn it in two 45° steps.
+
+[tool] sphinx2/hover  {"u": 0.1307, "v": 0.7522}  -> completed
+[tool] sphinx2/gripper_translate  {"d_x": 0.0022, "d_y": 0.0034, "d_z": -0.09}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_translate  {"d_x": 0.0281, "d_y": 0.0183, "d_z": 0.0127}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "z", "angle": 45}  -> completed
+[say]  The fingers have closed around the handle. I’m turning the knob counter-clockwise and checking that it follows the gripper.
+
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The stove is on. The simulator confirmed success and ended the episode automatically.

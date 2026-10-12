@@ -1,0 +1,56 @@
+[say]  I’ll inspect the towel, bring one corner over to its opposite corner, and check the diagonal fold.
+
+[tool] sphinx-robot/observe  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.315, "v": 0.481}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.416, "v": 0.418}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": 0.48, "dy_m": 0.12}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/nav_translate  {"dx_m": 0.43, "dy_m": 0.1}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The towel is square and flat on the table. I’m lining up with the near corner so I can fold it toward the opposite corner.
+
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.389, "v": 0.803}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.522, "v": 0.659}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -45}  -> completed
+[tool] sphinx-robot/ee_wrist_centric_rotate  {"tilt_up_deg": -20}  -> completed
+[tool] sphinx-robot/ee_teleport_via_click  {"u": 0.386, "v": 0.807}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/show_approach_axis  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.363, "v": 0.69}  -> completed
+[say]  The gripper is above the near corner. I’ll pinch the edge, lift it, and carry it across the towel in a shallow arc.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.0186, "dy_m": 0.0177, "dz_m": -0.069}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.474, "v": 0.754}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.002, "dz_m": -0.01}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "closed"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.025, "dy_m": -0.02, "dz_m": 0.09}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "head", "u": 0.666, "v": 0.683}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.12, "dy_m": -0.12, "dz_m": 0.1}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The corner is securely held, and the towel is bending along the diagonal. I’m lowering the lifted corner toward its match.
+
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.778, "v": 0.306}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.11, "dy_m": -0.085, "dz_m": -0.085}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.696, "v": 0.515}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.074, "dy_m": -0.06, "dz_m": -0.087}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/hover  {"view": "wrist", "u": 0.701, "v": 0.653}  -> completed
+[say]  The towel has shifted slightly during the fold. I’m making a small alignment adjustment before releasing the corner.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": 0.022, "dy_m": -0.04, "dz_m": -0.01}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/gripper_set  {"state": "open"}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.08, "dz_m": 0.2}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[say]  The towel is now folded into a triangle. I’m moving the gripper clear to check the corners and the diagonal edge.
+
+[tool] sphinx-robot/ee_robot_centric_translate  {"dx_m": -0.25, "dz_m": 0.08}  -> completed
+[tool] sphinx-robot/execute_waypoint  {}  -> completed
+[tool] sphinx-robot/end_episode  {}  -> completed
+[say]  Folded the towel diagonally into a triangle on the coffee table. The episode is saved.

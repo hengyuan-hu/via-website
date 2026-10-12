@@ -1,0 +1,37 @@
+[say]  I’m starting by inspecting the robot-control tools and initial scene, then I’ll operate the drawer in small, verified waypoints and end the episode once it is open.
+[tool] sphinx2/screenshot  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[say]  The cabinet is on the left, with the target handle in the second drawer position. I’m rotating the open gripper from a top-down pose to a level side-grasp pose before approaching that handle.
+[tool] sphinx2/gripper_rotate  {"axis": "x", "angle": 90}  -> completed
+[tool] sphinx2/gripper_reset  {}  -> completed
+[tool] sphinx2/gripper_show_rotation_gizmo  {}  -> completed
+[tool] sphinx2/gripper_rotate  {"axis": "x", "angle": -90}  -> completed
+[tool] sphinx2/hover  {"u": 0.515, "v": 0.637}  -> completed
+[tool] sphinx2/hover  {"u": 0.515, "v": 0.615}  -> completed
+[tool] sphinx2/hover  {"u": 0.515, "v": 0.655}  -> completed
+[tool] sphinx2/hover  {"u": 0.503, "v": 0.637}  -> completed
+[tool] sphinx2/camera_zoom  {"u": 0.505, "v": 0.63, "steps": 5}  -> completed
+[tool] sphinx2/hover  {"u": 0.08, "v": 0.424}  -> completed
+[tool] sphinx2/hover  {"u": 0.08, "v": 0.468}  -> completed
+[tool] sphinx2/hover  {"u": 0.08, "v": 0.505}  -> completed
+[tool] sphinx2/gripper_teleport_via_click  {"u": 0.08, "v": 0.468}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The gripper is now level and centered on the middle handle. I’m advancing in two short stages so I can verify the handle is actually between the fingers before closing.
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 7}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 3}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "f", "steps": 3}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_toggle  {"state": "closed"}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  The handle is enclosed and the gripper is closed. I’m pulling straight outward in measured increments, keeping the side-grasp orientation level.
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "b", "steps": 8}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "b", "steps": 8}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "b", "steps": 8}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[tool] sphinx2/gripper_advance_or_retreat  {"direction": "b", "steps": 8}  -> completed
+[tool] sphinx2/execute_waypoint  {}  -> completed
+[say]  Task completed successfully: the middle drawer is fully open, and the episode was automatically saved and closed by the simulator.

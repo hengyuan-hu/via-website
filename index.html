@@ -22,8 +22,10 @@
 
     <ol class="authors">
       <li><a href="https://hengyuanhu.com/" target="_blank" rel="noopener">Hengyuan Hu</a></li>
-      <li><a href="https://priyasundaresan.github.io/" target="_blank" rel="noopener">Priya Sundaresan</a></li>
       <li><a href="https://scholar.google.com/citations?user=SnTMyGUAAAAJ&amp;hl=en" target="_blank" rel="noopener">Jensen Gao</a></li>
+      <li><a href="https://priyasundaresan.github.io/" target="_blank" rel="noopener">Priya Sundaresan</a></li>
+      <li><a href="https://satvik1701.github.io/" target="_blank" rel="noopener">Satvik Sharma</a></li>
+      <li><a href="https://web.stanford.edu/~bohg/" target="_blank" rel="noopener">Jeannette Bohg</a></li>
       <li><a href="https://dorsa.fyi/" target="_blank" rel="noopener">Dorsa Sadigh</a></li>
     </ol>
     <ol class="affiliations">
@@ -46,22 +48,31 @@
       <li>Design a visual interface and a small set of versatile MCP tools for
         agents to see and command the robot.</li>
       <li>Run off-the-shelf agents (Claude Code or Codex) to drive the interface
-        and complete robot manipulation tasks.</li>
+        and complete robot manipulation tasks, in simulation and on a real
+        mobile manipulator.</li>
     </ul>
     <h3>Result Highlights</h3>
     <ul>
-      <li>VIA solves a diverse suite of tabletop manipulation tasks
-        <strong>zero-shot</strong> with a high success rate.</li>
+      <li>VIA solves diverse manipulation tasks
+        <strong>zero-shot</strong>, reaching 100% with Codex Astra 6 and 85%
+        with Claude Code Fable 5.</li>
+        <li>VIA drives a Stretch 4 mobile manipulator in the <strong>real world</strong>, succeeding
+          in 24/25 episodes across five tasks that require both navigation and
+          manipulation.</li>
+      <li>VIA scales with the underlying model, from 43% to 85% across the
+        Claude Code tiers and from 38% to 100% across the Codex tiers, and it
+        greatly outperforms a naive baseline that commands the robot without the
+        interface.</li>
       <li>VIA inherits strong reasoning, long-horizon planning, and closed-loop
         control capabilities from frontier agents for free.</li>
-      <li>VIA rides the wave of foundation model scaling, with VIA (Fable)
-        significantly outperforming VIA (Opus).</li>
     </ul>
     <h3>Note</h3>
     <ul>
       <li>VIA is <strong>not</strong> Code-as-Policies (CaP). It involves no CaP-style code
         generation and provides no perception or skill primitives for the model to
-        compose. VIA observes the UI through raw pixels (screenshots) and acts via
+        compose. In VIA, the agent <em>is</em> the policy, it closes the control
+        loop itself rather than generating a program or invoking a learned policy
+        to run the robot. VIA observes the UI through raw pixels (screenshots) and acts via
         low-level tools akin to mouse and keyboard operations in computer-use.</li>
       <li>VIA opens up a new opportunity for leveraging state-of-the-art foundation
         models at scale in robotics, and demonstrates that with the right
@@ -74,7 +85,7 @@
   <section class="section method">
     <h2>VIA</h2>
     <figure class="method-figure">
-      <img src="assets/front_figure.svg" alt="VIA system overview: an agent (Claude Code) operates a browser-based 3D robot-control UI through MCP tools; the UI commands the robot environment and reconstructs the scene from RGB-D cameras.">
+      <img src="assets/front_figure.svg" alt="VIA system overview: an agent operates a browser-based robot-control UI through MCP tools; the UI commands the robot environment and reconstructs the scene from RGB-D cameras.">
       <figcaption>
         The agent observes the interface by taking a screenshot of the whole UI, and
         acts through MCP tools rendered as clicks, drags, and keystrokes on it. The
@@ -83,8 +94,10 @@
         then calls <code>execute_waypoint</code> to invoke a simple PI
         (Proportional-Integral) controller that moves the real gripper to that pose.
         This observe-act loop repeats until the agent calls <code>end_episode</code>.
-        The UI reconstructs the 3D scene from RGB-D cameras. The MCP Tools section
-        below covers the documentation and illustrations of all available tools.
+        In simulation, the UI reconstructs the 3D scene from RGB-D cameras; in the
+        real world, where depth is sparse and noisy, the target gripper is
+        <strong>rendered on top of the raw camera feeds instead</strong>. The Example MCP Tools section below
+        documents and illustrates the main tools.
       </figcaption>
     </figure>
     <figure class="method-demo">
@@ -94,10 +107,12 @@
       </div>
       <figcaption>
         <p>
-          Videos showing episodes of VIA with Claude Code Fable completing
-          different tasks zero-shot. The agent completes a task via a loop of
+          Videos showing episodes of VIA completing different tasks zero-shot,
+          with Claude Code Fable 5 in simulation and Codex Astra 6 on the real
+          robot.
+          <!-- The agent completes a task via a loop of
           observation, thinking, and finally a tool call that returns a new
-          observation, until it reaches a terminal condition.
+          observation, until it reaches a terminal condition. -->
         </p>
         <p id="method-highlights-label" hidden><strong>Highlights</strong></p>
         <ul id="method-highlights" hidden><!-- per-video highlights injected here --></ul>
@@ -105,13 +120,14 @@
     </figure>
   </section>
 
-  <!-- 2.75 Evaluation -->
-  <!-- Draft the text in website/evaluation.md, then port it here (see abstract.md workflow). -->
+  <!-- 2.5 Simulation evaluation -->
   <section class="section evaluation compact">
-    <h2>Evaluation</h2>
+    <h2>Simulation Evaluation</h2>
     <p>
-      We use a suite of six tasks drawn from different benchmarks, together
-      covering diverse manipulations.
+      We evaluate VIA on six tabletop manipulation tasks with a Franka Panda arm in
+      robosuite, drawn from different benchmarks and together covering
+      manipulation, physical reasoning, long-horizon planning, and precise
+      execution.
     </p>
     <figure class="method-figure">
       <img src="assets/task_figure.svg" alt="The six evaluation tasks: for each task, the top panel shows an example initial state and the bottom panel the final state of a successful VIA rollout.">
@@ -120,67 +136,155 @@
         <details class="fold">
           <summary>Task descriptions</summary>
           <ul>
-            <li><strong>Stack</strong>: Pick up a red cube and place it on a larger green cube, from <a href="https://robosuite.ai/" target="_blank" rel="noopener">robosuite</a>.</li>
             <li><strong>Turn on stove</strong>: Turn on a stove by rotating its knob, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>.</li>
             <li><strong>Open drawer</strong>: Open the middle drawer of a three-drawer cabinet, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>.</li>
-            <li><strong>Put bowl on plate</strong>: Pick up a bowl and place it on a plate, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>. This demands physical reasoning and precision, as the bowl must be grasped by pinching its side wall and placed at the exact center of the plate to succeed.</li>
+            <li><strong>Put bowl on plate</strong>: Pick up a bowl and place it on the center of the plate, from <a href="https://libero-project.github.io/datasets" target="_blank" rel="noopener">LIBERO-Goal</a>. This demands reasoning on the grasp point and precision, as the bowl must be grasped by pinching its side wall and placed at the exact center of the plate to succeed.</li>
+            <li><strong>Square</strong>: Pick up the square nut and fit it onto the square peg, from <a href="https://robosuite.ai/" target="_blank" rel="noopener">robosuite</a>.</li>
             <li><strong>Rainbow</strong>: Arrange seven randomly placed colored blocks into a rainbow, a task we created. This tests long-horizon planning and execution.</li>
             <li><strong>T-block</strong>: Build a T-shape with three blocks of the same size: one blue block on the bottom and two green blocks resting directly on top of it, side by side; from <a href="https://arxiv.org/pdf/2510.06288" target="_blank" rel="noopener">BuilderBench</a>, re-implemented. This requires both solving a physics puzzle and precise manipulation.</li>
           </ul>
         </details>
       </figcaption>
     </figure>
-    <p>We evaluate VIA using two families of agents:</p>
-    <ul>
-      <li>Claude Code with Opus 4.8 (CC-Opus) and Fable 5 (CC-Fable),</li>
-      <li>Codex with GPT-5.5 (Codex-5.5) and GPT-5.6-Sol (Codex-5.6-Sol).</li>
-    </ul>
+
+    <h3>Protocol</h3>
     <p>
-      The reasoning effort is set to <code>xhigh</code> for all agents.
-    </p>
-    <p>
-      On top of a shared system prompt on how to use the interface, we consider two
-      variants of task-specific prompts for each task:
+      We use Claude Code (CC) and Codex as agents, each with three model tiers, to
+      measure how VIA scales with the strength of the underlying model:
     </p>
     <ul>
-      <li><strong>minimal</strong>: states only the task's goal and success
-        condition, testing the <em>zero-shot</em> performance of each agent.</li>
-      <li><strong>detailed</strong>: provides an example list of waypoints,
-        simulating the effect of having a demonstration.</li>
+      <li>Claude Code with Sonnet 5 (medium), Opus 4.8 (large), and Fable 5 (extra large),</li>
+      <li>Codex with Terra 5.6 (medium), Sol 5.6 (large), and Astra 6 (extra large).</li>
     </ul>
     <p>
-      We disable memory read/write for the agents so that they cannot gain
-      cross-episode experience.
+      All agents run at <code>xhigh</code> reasoning effort. On top of a shared
+      system prompt on how to use the interface, each task comes with a simple
+      prompt that states only the task description and success condition. We
+      evaluate every agent-model configuration over 10 seeds per task with varying
+      initial object placements, and cap each episode at one hour of wall-clock
+      time (two hours for Rainbow). Memory, internet search, and file access are
+      disabled, so the agents can neither gain cross-episode experience nor read
+      the simulator's source.
+    </p>
+    <p>
+      To isolate the benefit of VIA, we compare against a naive
+      <strong>baseline</strong> that uses the same observations, agent, and
+      controller but has no interface: it must issue commands to the controller
+      for immediate execution, without probing and iterating in the virtual
+      workspace. We also study a <strong>VIA-detailed</strong> variant whose task
+      prompts add hand-written instructions with example lists of waypoints.
+    </p>
+
+    <h3>Results</h3>
+    <figure class="method-figure narrow">
+      <img src="assets/scaling.svg" alt="Average success rate over the six tasks for VIA and the baseline across three model tiers of Claude Code and Codex.">
+      <figcaption>
+        Average success rate over the six tasks for VIA and the baseline, by model
+        tier. VIA scales with the capacity of the underlying model and reaches a
+        perfect score with Astra 6; the baseline performs poorly except with
+        Astra 6.
+      </figcaption>
+    </figure>
+    <details class="fold">
+      <summary>Success rate of VIA per task</summary>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Sonnet 5<small>CC · medium</small></th>
+            <th>Opus 4.8<small>CC · large</small></th>
+            <th>Fable 5<small>CC · extra large</small></th>
+            <th class="spacer"></th>
+            <th>Terra 5.6<small>Codex · medium</small></th>
+            <th>Sol 5.6<small>Codex · large</small></th>
+            <th>Astra 6<small>Codex · extra large</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Turn on stove</td><td>70%</td><td>100%</td><td>100%</td><td class="spacer"></td><td>70%</td><td>100%</td><td>100%</td></tr>
+          <tr><td>Open drawer</td><td>40%</td><td>70%</td><td>90%</td><td class="spacer"></td><td>30%</td><td>80%</td><td>100%</td></tr>
+          <tr><td>Put bowl on plate</td><td>50%</td><td>60%</td><td>100%</td><td class="spacer"></td><td>70%</td><td>100%</td><td>100%</td></tr>
+          <tr><td>Square</td><td>30%</td><td>70%</td><td>80%</td><td class="spacer"></td><td>0%</td><td>30%</td><td>100%</td></tr>
+          <tr><td>Rainbow</td><td>70%</td><td>80%</td><td>100%</td><td class="spacer"></td><td>50%</td><td>100%</td><td>100%</td></tr>
+          <tr><td>T-block</td><td>0%</td><td>10%</td><td>40%</td><td class="spacer"></td><td>10%</td><td>30%</td><td>100%</td></tr>
+          <tr class="overall"><td>Overall</td><td>43.3%</td><td>65.0%</td><td>85.0%</td><td class="spacer"></td><td>38.3%</td><td>73.3%</td><td>100.0%</td></tr>
+        </tbody>
+      </table>
+      <p class="table-note">
+        Success rates over ten seeds per task. The Overall row averages the six
+        tasks. Per-task numbers of the baseline are in the paper's appendix.
+      </p>
+    </details>
+    <p>
+      <strong>VIA solves diverse manipulation tasks zero-shot.</strong> Even the
+      medium models reach around 40% success, and the high success rates on
+      Turn on stove and Open drawer show that VIA handles articulated objects
+      beyond simple pick-and-place. On Rainbow, the agents always plan carefully
+      before moving any block, choosing the ordering, and even the direction of
+      the arc, that needs the fewest moves. T-block remains challenging for all
+      but Astra 6: every agent works out that the bottom block must be rotated by
+      45 degrees to increase the contact area, but most fail to place the green
+      blocks within the roughly 8 mm tolerance of the task.
+    </p>
+    <p>
+      <strong>VIA scales with the capacity of the underlying model.</strong>
+      Success improves from 43% to 85% across the Claude Code tiers and from 38%
+      to a perfect 100% across the Codex tiers, with no fine-tuning: VIA benefits
+      directly from the scale of the models it runs on.
+    </p>
+    <p>
+      <strong>VIA greatly outperforms the baseline.</strong> Without the
+      interface, the same agents perform poorly in every configuration except
+      Astra 6, where the interface still lifts the score from 93% to 100%. The
+      strong baseline result of Astra 6 is consistent with recent demonstrations
+      of zero-shot robot control with it; comparing across models quantifies this
+      step change and shows how poorly prior frontier models do without VIA.
+    </p>
+
+    <!-- <h3>Default versus detailed prompts</h3> -->
+    <p>
+      <strong>Default versus detailed prompts.</strong> VIA can
+      also improve without any gradient-based training, for example by
+      optimizing its prompts. As a case study, we manually write detailed
+      instructions for five tasks explaining how we would complete them with the
+      interface, including example lists of waypoints, and feed them to the large
+      configurations (CC Opus 4.8 and Codex Sol 5.6) as additional prompts.
     </p>
     <table class="results-table">
-      <caption>Success rate</caption>
+      <caption>Default versus detailed prompts</caption>
       <thead>
         <tr>
           <th>Task</th>
-          <th>CC-Opus<small>minimal</small></th>
-          <th>CC-Fable<small>minimal</small></th>
-          <th>Codex-5.5<small>minimal</small></th>
-          <th>Codex-5.6-Sol<small>minimal</small></th>
+          <th>Default<small>CC · Opus 4.8</small></th>
+          <th>Detailed<small>CC · Opus 4.8</small></th>
           <th class="spacer"></th>
-          <th>CC-Opus<small>detailed</small></th>
-          <th>Codex-5.5<small>detailed</small></th>
+          <th>Default<small>Codex · Sol 5.6</small></th>
+          <th>Detailed<small>Codex · Sol 5.6</small></th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Stack</td><td><strong>100%</strong></td><td><strong>100%</strong></td><td><strong>100%</strong></td><td><strong>100%</strong></td><td class="spacer"></td><td>—</td><td>—</td></tr>
-        <tr><td>Turn on stove</td><td><strong>100%</strong></td><td><strong>100%</strong></td><td>90%</td><td>90%</td><td class="spacer"></td><td><strong>100%</strong></td><td>90%</td></tr>
-        <tr><td>Open drawer</td><td>70%</td><td><strong>90%</strong></td><td>30%</td><td>30%</td><td class="spacer"></td><td><strong>100%</strong></td><td>30%</td></tr>
-        <tr><td>Put bowl on plate</td><td>60%</td><td><strong>100%</strong></td><td>40%</td><td>80%</td><td class="spacer"></td><td><strong>100%</strong></td><td>30%</td></tr>
-        <tr><td>Rainbow</td><td>80%</td><td><strong>100%</strong></td><td>60%</td><td>50%</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-        <tr><td>T-block</td><td>10%</td><td><strong>40%</strong></td><td><strong>40%</strong></td><td>20%</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-        <tr class="overall"><td>Overall</td><td>70%</td><td><strong>88%</strong></td><td>60%</td><td>62%</td><td class="spacer"></td><td><strong>100%</strong></td><td>50%</td></tr>
+        <tr><td>Turn on stove</td><td><strong>100%</strong></td><td><strong>100%</strong></td><td class="spacer"></td><td><strong>100%</strong></td><td>80%</td></tr>
+        <tr><td>Open drawer</td><td>70%</td><td><strong>100%</strong></td><td class="spacer"></td><td><strong>80%</strong></td><td>70%</td></tr>
+        <tr><td>Put bowl on plate</td><td>60%</td><td><strong>100%</strong></td><td class="spacer"></td><td><strong>100%</strong></td><td><strong>100%</strong></td></tr>
+        <tr><td>Square</td><td><strong>70%</strong></td><td>60%</td><td class="spacer"></td><td>30%</td><td><strong>80%</strong></td></tr>
+        <tr><td>T-block</td><td>10%</td><td><strong>20%</strong></td><td class="spacer"></td><td>30%</td><td><strong>40%</strong></td></tr>
+        <tr class="overall"><td>Avg.</td><td>62%</td><td><strong>76%</strong></td><td class="spacer"></td><td>68%</td><td><strong>74%</strong></td></tr>
       </tbody>
     </table>
     <p class="table-note">
-      "—" marks combinations we do not evaluate; bold marks the best result per
-      task within each prompt variant; the Overall row averages each column over
-      its evaluated tasks.
+      Success rates over 10 episodes per task; bold marks the higher rate within
+      each agent, including ties.
     </p>
+    <p>
+      The instructions help modestly, improving the average success rate by 14%
+      for CC Opus 4.8 and by 6% for Codex Sol 5.6. The remaining failures vary
+      from task to task: T-block failures are primarily due to imprecise
+      perception and execution, while Sol 5.6's drawer failures come from opening
+      the wrong drawer, which the instructions do not specifically emphasize.
+      Having the agents review their own failures and optimize their prompts may
+      be a more promising direction than writing instructions by hand.
+    </p>
+
     <details class="fold">
       <summary>Tool Call Efficiency and Cost</summary>
       <table class="results-table">
@@ -188,23 +292,23 @@
         <thead>
           <tr>
             <th>Task</th>
-            <th>CC-Opus<small>minimal</small></th>
-            <th>CC-Fable<small>minimal</small></th>
-            <th>Codex-5.5<small>minimal</small></th>
-            <th>Codex-5.6-Sol<small>minimal</small></th>
+            <th>Sonnet 5<small>CC · medium</small></th>
+            <th>Opus 4.8<small>CC · large</small></th>
+            <th>Fable 5<small>CC · extra large</small></th>
             <th class="spacer"></th>
-            <th>CC-Opus<small>detailed</small></th>
-            <th>Codex-5.5<small>detailed</small></th>
+            <th>Terra 5.6<small>Codex · medium</small></th>
+            <th>Sol 5.6<small>Codex · large</small></th>
+            <th>Astra 6<small>Codex · extra large</small></th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Stack</td><td>28</td><td>40</td><td><strong>26</strong></td><td>32</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-          <tr><td>Turn on stove</td><td>36</td><td>39</td><td>33</td><td><strong>31</strong></td><td class="spacer"></td><td>43</td><td><strong>32</strong></td></tr>
-          <tr><td>Open drawer</td><td>47</td><td>38</td><td><strong>21</strong></td><td>33</td><td class="spacer"></td><td>46</td><td><strong>30</strong></td></tr>
-          <tr><td>Put bowl on plate</td><td>59</td><td><strong>53</strong></td><td>78</td><td>66</td><td class="spacer"></td><td><strong>48</strong></td><td>57</td></tr>
-          <tr><td>Rainbow</td><td>159</td><td><strong>143</strong></td><td>176</td><td>217</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-          <tr><td>T-block</td><td>81</td><td>89</td><td><strong>52</strong></td><td>122</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-          <tr class="overall"><td>Overall</td><td>68</td><td>67</td><td><strong>64</strong></td><td>84</td><td class="spacer"></td><td>46</td><td><strong>40</strong></td></tr>
+          <tr><td>Turn on stove</td><td>84</td><td>36</td><td>39</td><td class="spacer"></td><td>46</td><td>48</td><td><strong>16</strong></td></tr>
+          <tr><td>Open drawer</td><td>117</td><td>47</td><td>38</td><td class="spacer"></td><td>91</td><td>33</td><td><strong>19</strong></td></tr>
+          <tr><td>Put bowl on plate</td><td>174</td><td>59</td><td>53</td><td class="spacer"></td><td>72</td><td>52</td><td><strong>34</strong></td></tr>
+          <tr><td>Square</td><td>81</td><td>92</td><td>69</td><td class="spacer"></td><td>—</td><td>87</td><td><strong>42</strong></td></tr>
+          <tr><td>Rainbow</td><td>271</td><td>159</td><td>143</td><td class="spacer"></td><td>175</td><td>208</td><td><strong>136</strong></td></tr>
+          <tr><td>T-block</td><td>—</td><td>81</td><td>89</td><td class="spacer"></td><td>162</td><td>109</td><td><strong>59</strong></td></tr>
+          <tr class="overall"><td>Overall</td><td>146</td><td>79</td><td>72</td><td class="spacer"></td><td>109</td><td>90</td><td><strong>51</strong></td></tr>
         </tbody>
       </table>
       <table class="results-table">
@@ -212,35 +316,106 @@
         <thead>
           <tr>
             <th>Task</th>
-            <th>CC-Opus<small>minimal</small></th>
-            <th>CC-Fable<small>minimal</small></th>
-            <th>Codex-5.5<small>minimal</small></th>
-            <th>Codex-5.6-Sol<small>minimal</small></th>
+            <th>Sonnet 5<small>CC · medium</small></th>
+            <th>Opus 4.8<small>CC · large</small></th>
+            <th>Fable 5<small>CC · extra large</small></th>
             <th class="spacer"></th>
-            <th>CC-Opus<small>detailed</small></th>
-            <th>Codex-5.5<small>detailed</small></th>
+            <th>Terra 5.6<small>Codex · medium</small></th>
+            <th>Sol 5.6<small>Codex · large</small></th>
+            <th>Astra 6<small>Codex · extra large</small></th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Stack</td><td>$2.4</td><td>$7.3</td><td><strong>$1.5</strong></td><td>$1.6</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-          <tr><td>Turn on stove</td><td>$4.1</td><td>$8.9</td><td>$2.5</td><td><strong>$2.2</strong></td><td class="spacer"></td><td>$5.7</td><td><strong>$3.3</strong></td></tr>
-          <tr><td>Open drawer</td><td>$7.4</td><td>$7.5</td><td>$1.4</td><td><strong>$1.1</strong></td><td class="spacer"></td><td>$6.5</td><td><strong>$1.7</strong></td></tr>
-          <tr><td>Put bowl on plate</td><td>$7.5</td><td>$11.8</td><td>$8.1</td><td><strong>$2.9</strong></td><td class="spacer"></td><td>$5.0</td><td><strong>$4.9</strong></td></tr>
-          <tr><td>Rainbow</td><td>$26.0</td><td>$36.1</td><td>$23.4</td><td><strong>$6.1</strong></td><td class="spacer"></td><td>—</td><td>—</td></tr>
-          <tr><td>T-block</td><td>$9.7</td><td>$19.2</td><td><strong>$6.1</strong></td><td>$10.5</td><td class="spacer"></td><td>—</td><td>—</td></tr>
-          <tr class="overall"><td>Overall</td><td>$9.5</td><td>$15.1</td><td>$7.2</td><td><strong>$4.1</strong></td><td class="spacer"></td><td>$5.7</td><td><strong>$3.3</strong></td></tr>
+          <tr><td>Turn on stove</td><td>$2.8</td><td>$4.1</td><td>$8.9</td><td class="spacer"></td><td>$1.1</td><td>$2.5</td><td><strong>$1.0</strong></td></tr>
+          <tr><td>Open drawer</td><td>$4.8</td><td>$7.4</td><td>$7.5</td><td class="spacer"></td><td>$2.8</td><td><strong>$1.0</strong></td><td>$1.3</td></tr>
+          <tr><td>Put bowl on plate</td><td>$5.8</td><td>$7.5</td><td>$11.8</td><td class="spacer"></td><td>$1.9</td><td><strong>$1.7</strong></td><td>$2.5</td></tr>
+          <tr><td>Square</td><td><strong>$2.8</strong></td><td>$12.5</td><td>$14.1</td><td class="spacer"></td><td>—</td><td>$3.5</td><td><strong>$2.8</strong></td></tr>
+          <tr><td>Rainbow</td><td>$10.2</td><td>$26.0</td><td>$36.1</td><td class="spacer"></td><td><strong>$1.6</strong></td><td>$4.5</td><td>$7.6</td></tr>
+          <tr><td>T-block</td><td>—</td><td>$9.7</td><td>$19.2</td><td class="spacer"></td><td>$4.9</td><td>$3.8</td><td><strong>$3.7</strong></td></tr>
+          <tr class="overall"><td>Overall</td><td>$5.3</td><td>$11.2</td><td>$16.3</td><td class="spacer"></td><td><strong>$2.4</strong></td><td>$2.8</td><td>$3.2</td></tr>
         </tbody>
       </table>
       <p class="table-note">
-        CC costs are read directly from each episode's session cost, while Codex
-        costs are estimated from token usage and listed API pricing.
+        Means over successful episodes of the default-prompt evaluations above; we
+        omit failed episodes because the agents often keep trying until the time
+        limit. "—" marks configurations with no successful episode; bold marks
+        the fewest calls or lowest cost per row, including ties. The Overall row
+        averages the task means over tasks with at least one success. Costs are
+        estimated from recorded token usage at each model's API prices.
       </p>
     </details>
+  </section>
+
+  <!-- 2.75 Real-world evaluation -->
+  <section class="section evaluation compact">
+    <h2>Real-World Evaluation</h2>
+    <p>
+      Instead of staying in the stationary tabletop domain, we run VIA on five
+      real-world tasks with a Stretch 4 mobile manipulator that operates at room
+      scale. The mobile robot allows a much wider range of initial conditions, as
+      well as multi-step tasks in which the agent must remember objects that leave
+      its view as the robot moves.
+    </p>
+    <figure class="method-figure">
+      <img src="assets/real_world_tasks.svg" alt="The five real-world tasks: Lamp, Shelf, Towel, Wipe, and Basket, each photographed with red arrows marking the intended motion.">
+      <figcaption>
+        The five real-world tasks. Red arrows indicate the intended motions. The
+        initial locations of the objects and of the robot are randomized for each
+        episode.
+        <details class="fold">
+          <summary>Task descriptions</summary>
+          <ul>
+            <li><strong>Lamp</strong>: Turn on the lamp by pulling the small chain downward. The lamp may not appear in the initial view of the robot, and the chain is small and requires precise motion.</li>
+            <li><strong>Shelf</strong>: Open the top drawer and put the toy lion from the shelf into the drawer. The toy's location and pose are randomized over the shelf, and the toy and drawer are far enough apart that they never appear in the robot's view at the same time.</li>
+            <li><strong>Towel</strong>: Fold a towel diagonally by bringing one corner to the opposite corner. The location and pose of both the towel and the table are randomized. This tests deformable object manipulation.</li>
+            <li><strong>Wipe</strong>: Pull a wipe out of its container and use it to clean the black mark on the table. The location and shape of the mark, as well as the location and orientation of the table, are randomized.</li>
+            <li><strong>Basket</strong>: Open the basket until the lid flips to the back. The location and orientation of the basket are randomized. This manipulation of an articulated object requires a complex motion.</li>
+          </ul>
+        </details>
+      </figcaption>
+    </figure>
+    <p>
+      Unlike in simulation, where perfect depth yields dense, informative point
+      clouds, the head-mounted lidar of Stretch 4 provides depth only for sparse
+      points at room scale. VIA therefore uses purely 2D interface components on
+      the real robot, rendering the target gripper on top of the head and wrist
+      camera feeds, and lets the agent probe depth with <code>hover</code>. Depth
+      in the wrist view comes from Fast-FoundationStereo on the wrist-mounted
+      stereo camera. We evaluate VIA with Codex Astra 6 for five episodes per
+      task.
+    </p>
+    <table class="results-table">
+      <caption>Real-world success rate</caption>
+      <thead>
+        <tr><th>Method</th><th>Lamp</th><th>Shelf</th><th>Towel</th><th>Wipe</th><th>Basket</th><th>Overall</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>VIA · Codex Astra 6</td><td>4/5</td><td>5/5</td><td>5/5</td><td>5/5</td><td>5/5</td><td>24/25</td></tr>
+      </tbody>
+    </table>
+    <p>
+      VIA succeeds in 24 of 25 episodes, showing that it extends to real-world
+      manipulation with commercial hardware; Towel and Wipe also extend the
+      evaluation suite to deformable objects. The episodes exhibit several
+      interesting behaviors:
+    </p>
+    <ul>
+      <li><strong>Lamp</strong>: the task description mentions that the lamp is on a cabinet, and the agent searches for the lamp quickly once the cabinet appears in its view. In the one failure, the agent overextends the gripper and grabs the stem of the lamp instead of the chain, likely a perception problem since both are the same silver color.</li>
+      <li><strong>Shelf</strong>: the head camera's limited field of view requires the agent to remember the locations of the lion and the drawer to move efficiently between them. VIA does this through the agent's built-in context management, without any additional engineering.</li>
+      <li><strong>Towel</strong>: the agent folds the towel precisely so that the edges align well.</li>
+      <li><strong>Wipe</strong>: the agent's view is blocked while wiping, so it moves the gripper away after a few wipes to check the cleanliness of the table. In one episode it drops the wipe and pushes it with a closed gripper after holding it fails to wipe cleanly.</li>
+      <li><strong>Basket</strong>: the agent automatically retries within an episode when the lid slips out of the gripper during opening.</li>
+    </ul>
   </section>
 
   <!-- 3 & 4. Rollout showcase -->
   <section class="section showcase">
     <h2>Task Rollouts</h2>
+    <p class="showcase-intro"> Pick a task, an agent, and a seed to
+        replay the agent's view of the interface (left) and the robot
+        cameras (right). Expand the transcript for its reasoning and
+        tool calls.
+    </p>
 
     <div class="task-tabs" id="task-tabs"><!-- task tabs injected here --></div>
 
@@ -277,7 +452,7 @@
   <section class="section tools" id="tools-section" hidden>
     <div class="tools-layout">
       <div class="tools-side">
-        <h2>MCP Tools</h2>
+        <h2>Example MCP Tools</h2>
         <nav class="tool-list" id="tool-list"><!-- tool names injected here --></nav>
       </div>
       <div class="tool-detail">
